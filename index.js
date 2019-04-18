@@ -1,3 +1,5 @@
+var settings = require('./settings.js');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -48,6 +50,6 @@ app.post("/set", (request, response) => {
     response.send(oldBoard);
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(settings.port, () => {
     console.log("Server Started");
 })
