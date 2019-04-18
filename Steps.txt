@@ -1,0 +1,7 @@
+Setup the Base NodeJS server.
+Setup the HTML page (Text Input, Get Button, Text Area, Save Button)
+Setup the blank js & css
+Setup blank endpoints.
+Setup send stuff (console.log the saved content)
+Setup the get stuff
+Delete the content when getting
