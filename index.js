@@ -7,10 +7,12 @@ var path = require('path');
 var app = new express();
 var staticFiles = express.static(__dirname + "/public");
 app.use(staticFiles);
-var urlEncoded = bodyParser.urlencoded({
-    extended: true
-});
-app.use(urlEncoded);
+var jsonEncoded = bodyParser.json();
+app.use(jsonEncoded);
+
+const easter = {
+    "google.com": "ɡooɡle.com",
+}
 
 var clipboards = {};
 var nothingMsg = "Nothing is here, Write something!";
@@ -23,14 +25,16 @@ app.get("/", (request, response) => {
 app.post("/get", (request, response) => {
     var boardName = request.body.name;
     var oldBoard = "";
-    
+
     if(boardName in clipboards){
         oldBoard = clipboards[boardName];
         delete clipboards[boardName];
+    } else if(boardName in easter){
+        oldBoard = easter[boardName];
     } else {
         oldBoard = nothingMsg;
     }
-    
+
     response.send(oldBoard);
 });
 
@@ -38,7 +42,7 @@ app.post("/set", (request, response) => {
     var boardName = request.body.name;
     var newBoard = request.body.content;
     var oldBoard = "";
-    
+
     if(newBoard == "" || newBoard == oldBoard || newBoard == nothingMsg) {
         delete clipboards[boardName];
         oldBoard = "You need to have some content!";
@@ -46,7 +50,7 @@ app.post("/set", (request, response) => {
         clipboards[boardName] = newBoard;
         oldBoard = "Saved!";
     }
-    
+
     response.send(oldBoard);
 });
 

@@ -3,26 +3,27 @@ var getBuddon = document.getElementById("getBuddon");
 var clipboard = document.getElementById("Clipboard");
 var saveBuddon = document.getElementById("saveBuddon");
 
-getBuddon.addEventListener("click", () => {
+getBuddon.addEventListener("click", async () => {
     var name = nameBox.value;
-    var request = new XMLHttpRequest();
-    request.addEventListener("load", displayClipboard);
-    request.open("POST", "/get");
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    request.send("name=" + name);
+    var results = await fetch('/get', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({name: name})
+    }).then(res => res.json());
+    displayClipboard(results);
 });
 
 saveBuddon.addEventListener("click", () => {
     var newBoard = clipboard.value;
     var name = nameBox.value;
-    var request = new XMLHttpRequest();
-    request.addEventListener("load", displayClipboard);
-    request.open("POST", "/set");
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    request.send("content=" + newBoard + "&name=" + name);
+    var results = await fetch('/set', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({name: name, content: newBoard})
+    }).then(res => res.json());
+    displayClipboard(results);
 });
 
-function displayClipboard() {
-    clipboard.value = this.response;
-    console.log(this.response);
+function displayClipboard(results) {
+    clipboard.value = results.data;
 };
